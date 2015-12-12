@@ -1,0 +1,1 @@
+# Compilegcc -Wall -Werror *.c -o stack or make# TODOYou can try to expand this implementation by handling the case where the stackis full by doubling the size of data.Hint: `man realloc`
