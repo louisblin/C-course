@@ -3,10 +3,13 @@
 
 #include "stack.h"
 
-void stack_init(stack *const s)
+stack *const stack_init()
 {
+    stack *s = (stack*) malloc(sizeof(stack));
     s->size = 0;
     s->top = NULL;
+
+    return s;
 }
 
 int stack_size(const stack *const s)

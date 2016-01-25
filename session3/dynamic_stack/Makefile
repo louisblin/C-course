@@ -1,5 +1,5 @@
 CC     = gcc
-CFLAGS = -Wall -Werror -pedantic 
+CFLAGS = -g -Wall -Werror -pedantic
 
 SRC    = $(wildcard *.c)
 OBJ    = $(patsubst %.c, %.o, $(SRC))

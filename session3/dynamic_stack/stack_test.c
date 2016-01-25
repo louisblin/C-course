@@ -5,8 +5,7 @@
 
 int main(void) {
 
-    stack *s = (stack*) malloc(sizeof(stack));
-    stack_init(s);
+    stack *s = stack_init();
 
     for(int i = 0; i < 5; i++) {
         stack_push(s, i);
@@ -21,6 +20,10 @@ int main(void) {
         printf("\nPopped from stack(%d) %d :: ", stack_size(s), d);
         stack_dump(s);
     }
+
+    printf("\n\nPopping empty stack...");
+    printf("(%d) %d :: ", stack_size(s), stack_pop(s));
+    stack_dump(s);
 
     free(s);
     return 0;
