@@ -14,7 +14,7 @@ struct stack {
 
 typedef struct stack stack;
 
-void stack_init(stack *const s);
+stack* stack_init();
 int stack_size(const stack *const s);
 int stack_getTop(const stack *const s);
 void stack_push(stack *const s, const int d);
