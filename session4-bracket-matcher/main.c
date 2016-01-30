@@ -4,33 +4,31 @@
 #include "stack.h"
 #include "bracketEval.h"
 #include "main.h"
+#include "errorHandle.h"
 
 int main(int argc, char **argv){
-    char *knownLenStr = malloc(sizeof(char) * MAXSTRSIZE);
-
-    memset(knownLenStr, 0, MAXSTRSIZE);
-    strcpy(knownLenStr, "((3+4)))");
-
-    int error = eval(knownLenStr);
-    int top = returnTop();
-    //printf("\nsize = %d, top = %d\n", error, top);
-    //printf("%d", error);
     
-    if(error != 0){
-        //printf("Error code: %d \n",error);
-        int index = top - OPENBRACKET;
-        
-        if(index <= 0){
-            index = index + (int)strlen(knownLenStr);
-        }
-        
-        
-        printf("\nSomething was wrong @ index: %d of %s \n", index, knownLenStr);
-        return 0;
-    } else{
-        printf("\nEverything was good with your brackets");
+    if(argc != 2) {
+        printf("Usage: %s <expression>", argv[0]);
+        exit(EXIT_FAILURE);
     }
-    printf("\n");
-    return 0;
+  
+    char *knownLenStr = malloc(sizeof(char) * MAXSTRSIZE);
+    memset(knownLenStr, '\0', MAXSTRSIZE);
+    strncpy(knownLenStr, argv[1], MAXSTRSIZE);
+
+    bracketError_t* error = eval(knownLenStr);
+    
+    if(error->errorCode != OK){
+        printf("\nMismatch in %s. Expected \'%c\' at %d.\n", 
+            knownLenStr, error->expectingChar, error->position);
+    } 
+    else {
+        printf("\nEverything was good with your brackets!\n");
+    }
+    
+    free(error);
+    free(knownLenStr);
+    exit(EXIT_SUCCESS);
 }
 

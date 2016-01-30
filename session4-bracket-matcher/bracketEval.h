@@ -1,11 +1,10 @@
 #ifndef BRACKETEVAL_H
 #define BRACKETEVAL_H
 
-int eval(char *str);
-int returnTop();
+#include "errorHandle.h"
+
+bracketError_t* eval(char *str);
 
 //defining enums for stack
-#define OPENBRACKET 1
-
 #endif
 

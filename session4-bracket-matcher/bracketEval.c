@@ -1,51 +1,67 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <assert.h>
+
 #include "bracketEval.h"
 #include "stack.h"
 #include "main.h"
-#include <stdio.h>
+#include "bracket.h"
+#include "errorHandle.h"
 
-int top;
+bracketError_t* eval(char *str){
 
-//loop and push brackets
-//pop brackets if closing bracket found
-int processExpression(char *str, stack* stackB){
+    // init stack, and error
+    stack* stackB = stack_init();
+    bracketError_t* error = (bracketError_t*) malloc(sizeof(bracketError_t));
+    error->errorCode = OK;
     
-    int currentTopNum = 0;
+    int i;
+    
     //loop and push brackets
-    for (int i = 0; i < MAXSTRSIZE; ++i) {
-
-        char currentElem = str[i];
-        if(currentElem == '('){
-            stack_push(stackB, OPENBRACKET + i);
-            currentTopNum = i;
+    for (i = 0; i < MAXSTRSIZE && str[i] != '\0'; ++i) {
+        
+        brackets_t currentElem = charToBracket(str[i]);
+        printf("curr for %c :: %d.\n", str[i], currentElem);
+        //debug_print(currentElem, 0);
+        
+        if(currentElem == NOTBRACKET){
+            continue;
+        }
+        
+        if(isOpeningBracket(currentElem)){
             
+            stack_push(stackB, currentElem);
+        } 
+        else {
+            
+            assert(isClosingBracket(currentElem));
 
-        } else if(currentElem == ')'){
-
-            top = stack_pop(stackB);
-            //printf("%d", top);
-            if(top == -1){
-                stackB->size -= 1;
-                
+            // Error: too many closing brackets
+            if (stack_is_empty(stackB)){
+                error->errorCode = MISMATCH;
+                error->expectingChar = bracketToChar(getMatchingBracket(currentElem));
+                error->position = 0;
+                return error;
             }
-            if(top - (top-currentTopNum) != OPENBRACKET){
-                return -1;
+            
+            int top = stack_pop(stackB);
+
+            // Error: bracket mismatch
+            if(!isMatchingBracket(top, currentElem)){
+                error->errorCode = MISMATCH;
+                error->position = i;
+                error->expectingChar = bracketToChar(getMatchingBracket(top));
+                return error;
             }
         }
     }
-    return 0;
-}
 
-int eval(char *str){
-
-    //init stack
-    stack* stackB = stack_init();
-
-    processExpression(str, stackB);
-
-    return stack_size(stackB);
-}
-
-int returnTop(){
-    return top;
+    // Error: too many openning brackets
+    if(!stack_is_empty(stackB)){
+        error->errorCode = MISMATCH;
+        error->position = i;
+        error->expectingChar = bracketToChar(getMatchingBracket(stack_getTop(stackB)));
+    }
+    
+    return error;
 }

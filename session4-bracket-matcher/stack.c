@@ -17,6 +17,11 @@ int stack_size(const stack *const s)
     return s->size;
 }
 
+bool stack_is_empty(const stack *const s)
+{
+    return s->size == 0;
+}
+
 int stack_getTop(const stack *const s)
 {
     if (s->size == 0) {

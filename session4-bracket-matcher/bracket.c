@@ -1,11 +1,3 @@
-//
-//  bracket.c
-//  Session5
-//
-//  Created by David Jay on 30/01/2016.
-//  Copyright © 2016 David Jay. All rights reserved.
-//
-
 #include <stdbool.h>
 #include "bracket.h"
 
