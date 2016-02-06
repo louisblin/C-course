@@ -21,7 +21,10 @@ bracketError_t* eval(char *str){
     for (i = 0; i < MAXSTRSIZE && str[i] != '\0'; ++i) {
         
         brackets_t currentElem = charToBracket(str[i]);
+
+#ifdef VERBOSE
         printf("curr for %c :: %d.\n", str[i], currentElem);
+#endif
         //debug_print(currentElem, 0);
         
         if(currentElem == NOTBRACKET){
@@ -62,6 +65,10 @@ bracketError_t* eval(char *str){
         error->position = i;
         error->expectingChar = bracketToChar(getMatchingBracket(stack_getTop(stackB)));
     }
-    
+   
+    // free resources
+    stack_empty(stackB);
+    free(stackB);
+
     return error;
 }

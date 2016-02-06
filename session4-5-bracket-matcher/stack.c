@@ -62,3 +62,10 @@ int stack_pop(stack *s)
 
 }
 
+void stack_empty(stack *const s) {
+
+  while (!stack_is_empty(s)) {
+    stack_pop(s);
+  }
+}
+

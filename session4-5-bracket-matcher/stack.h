@@ -22,5 +22,6 @@ bool stack_is_empty(const stack *const s);
 int stack_getTop(const stack *const s);
 void stack_push(stack *const s, const int d);
 int stack_pop(stack *const s);
+void stack_empty(stack *const s);
 
 #endif
